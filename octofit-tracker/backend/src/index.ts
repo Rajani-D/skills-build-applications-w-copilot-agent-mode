@@ -1,10 +1,9 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import { Activity, LeaderboardEntry, Team, User, Workout } from './models';
+import { connectToDatabase } from './config/database';
 
 const app = express();
 const port = Number(process.env.PORT || 8000);
-const mongoUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/octofit_db';
 
 const codespaceName = process.env.CODESPACE_NAME;
 const apiBaseUrl = codespaceName
@@ -71,8 +70,7 @@ app.post('/api/workouts/', async (req, res) => {
   res.status(201).json(workout);
 });
 
-mongoose
-  .connect(mongoUri)
+connectToDatabase()
   .then(() => console.log('MongoDB connected'))
   .catch((error) => console.error('MongoDB connection error:', error));
 
